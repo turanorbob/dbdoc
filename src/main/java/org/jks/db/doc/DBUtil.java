@@ -1,15 +1,17 @@
 package org.jks.db.doc;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.BasicDataSourceFactory;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 /**
  * @Description
- * @Author legend <legendl@synnex.com>
+ * @Author legend <liaojian.2008.ok@163.com>
  * @Version v1.0.0
  * @Since 1.0
  * @Date 2019/4/17

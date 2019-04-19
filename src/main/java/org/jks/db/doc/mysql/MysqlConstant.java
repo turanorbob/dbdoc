@@ -2,7 +2,7 @@ package org.jks.db.doc.mysql;
 
 /**
  * @Description
- * @Author legend <legendl@synnex.com>
+ * @Author legend <liaojian.2008.ok@163.com>
  * @Version v1.0.0
  * @Since 1.0
  * @Date 2019/4/17
