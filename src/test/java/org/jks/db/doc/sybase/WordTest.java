@@ -18,6 +18,8 @@ public class WordTest {
     public static void main(String args[]) throws IOException, SQLException, InterruptedException {
         WordService wordService = new WordService();
         SybaseTableService tableService = new SybaseTableService();
+        long start = System.currentTimeMillis();
         wordService.exportAllDocx(tableService);
+        System.out.println("cost time:" + (System.currentTimeMillis() - start) + "ms");
     }
 }
