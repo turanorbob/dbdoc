@@ -1,8 +1,10 @@
 package org.jks.db.doc.excel;
 
 import org.apache.commons.compress.utils.Lists;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
 
@@ -65,7 +67,7 @@ public class MergeUtil {
 
     public static void copyRow(XSSFWorkbook wb, XSSFRow oldRow, XSSFRow toRow) {
         toRow.setHeight(oldRow.getHeight());
-        for (Iterator cellIt = oldRow.cellIterator(); cellIt.hasNext(); ) {
+        for (Iterator<Cell> cellIt = oldRow.cellIterator(); cellIt.hasNext(); ) {
             XSSFCell tmpCell = (XSSFCell) cellIt.next();
             XSSFCell newCell = toRow.createCell(tmpCell.getColumnIndex());
             copyCell(wb, tmpCell, newCell);
@@ -78,7 +80,7 @@ public class MergeUtil {
         for (int i = 0; i <= length; i++) {
             toSheet.setColumnWidth(i, fromSheet.getColumnWidth(i));
         }
-        for (Iterator rowIt = fromSheet.rowIterator(); rowIt.hasNext(); ) {
+        for (Iterator<Row> rowIt = fromSheet.rowIterator(); rowIt.hasNext(); ) {
             XSSFRow oldRow = (XSSFRow) rowIt.next();
             XSSFRow newRow = toSheet.createRow(oldRow.getRowNum());
             copyRow(wb, oldRow, newRow);
@@ -135,6 +137,9 @@ public class MergeUtil {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+            finally{
+                fromExcel.close();
             }
 
         }

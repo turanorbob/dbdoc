@@ -8,9 +8,9 @@ package org.jks.db.doc.sybase;
  * @Date 2019/4/17
  */
 public interface SybaseConstant {
-    String DB_HOST = "xxx";
+    String DB_HOST = "DEVELOP";
     Integer DB_PORT = 4100;
-    String DB_NAME = "xx";
-    String DB_USERNAME = "xx";
-    String DB_PASSWORD = "xx";
+    String DB_NAME = "CIS";
+    String DB_USERNAME = "rickg";
+    String DB_PASSWORD = "synnex2k11";
 }

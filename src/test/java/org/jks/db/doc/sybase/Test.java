@@ -1,9 +1,8 @@
 package org.jks.db.doc.sybase;
 
-import org.jks.db.doc.DBUtil;
-
-import java.sql.Connection;
 import java.sql.ResultSet;
+
+import org.jks.db.doc.DBUtil;
 
 /**
  * @Author legend <legendl@synnex.com>
@@ -12,7 +11,7 @@ import java.sql.ResultSet;
 public class Test {
     public static void main(String args[]) throws Exception {
         ResultSet rs = null;
-        Connection connection = DBUtil.getInstance("sybase", SybaseConstant.DB_HOST, SybaseConstant.DB_PORT, SybaseConstant.DB_NAME, SybaseConstant.DB_USERNAME, SybaseConstant.DB_PASSWORD).getConnection();
+        DBUtil instance = DBUtil.getInstance("sybase", SybaseConstant.DB_HOST, SybaseConstant.DB_PORT, SybaseConstant.DB_NAME, SybaseConstant.DB_USERNAME, SybaseConstant.DB_PASSWORD);
         String sql = "SELECT count(DISTINCT sch.contract_no) \n" +
                 "        FROM service_contract_header sch\n" +
                 "        INNER JOIN service_contract_line_sum scls\n" +
@@ -30,12 +29,12 @@ public class Test {
                 "            AND scls.delete_id IS NULL\n" +
                 "            AND scls.delete_datetime IS NULL";
         long start = System.currentTimeMillis();
-        rs = DBUtil.query(connection, sql);
+        rs = instance.query(sql);
         System.out.println("cost time:" + (System.currentTimeMillis()-start));
         while (rs.next()) {
             System.out.println(rs.getInt(1));
         }
-        DBUtil.close(rs);
-        DBUtil.close(connection);
+        instance.close(rs);
+        instance.close();
     }
 }

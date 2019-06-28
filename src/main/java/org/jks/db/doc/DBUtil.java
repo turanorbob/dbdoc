@@ -19,8 +19,9 @@ import java.util.Properties;
 public class DBUtil {
     public static DBUtil instance = null;
     public static DataSource dataSource;
+    private Connection connection;
 
-    public static DBUtil getInstance(String type, String host, Integer port, String dbname, String username, String password) throws Exception {
+    public static DBUtil getInstance(String type, String host, Integer port, String dbname, String username, String password) {
         if(instance == null){
             instance = new DBUtil();
 
@@ -40,33 +41,43 @@ public class DBUtil {
             properties.setProperty("url", url);
             properties.setProperty("username", username);
             properties.setProperty("password", password);
-
-            dataSource = BasicDataSourceFactory.createDataSource(properties);
+            
+            try{
+                dataSource = BasicDataSourceFactory.createDataSource(properties);
+                instance.setConnection(dataSource.getConnection());
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
         }
 
         return instance;
     }
 
-    public static Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
+    public Connection getConnection() throws SQLException {
+        return connection;
     }
 
-    public static ResultSet query(Connection conn, String sql) throws SQLException {
-        Statement stmt = conn.createStatement();
+    public void setConnection(Connection connection){
+        this.connection = connection;
+    }
+
+    public ResultSet query(String sql) throws SQLException {
+        Statement stmt = connection.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
 
         return rs;
     }
 
-    public static void close(ResultSet rs) throws SQLException {
+    public void close(ResultSet rs) throws SQLException {
         if (rs != null) {
             rs.close();
         }
     }
 
-    public static void close(Connection conn) throws SQLException {
-        if (conn != null) {
-            conn.close();
+    public void close() throws SQLException {
+        if (connection != null) {
+            connection.close();
         }
     }
 }

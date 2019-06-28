@@ -5,7 +5,6 @@ import org.jks.db.doc.DBUtil;
 import org.jks.db.doc.TableService;
 import org.jks.db.doc.model.FieldModel;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -22,12 +21,12 @@ public class SybaseTableService implements TableService {
     @Override
     public List<String> allTables() throws SQLException {
         List<String> tables = Lists.newArrayList();
-        Connection connection = null;
+        DBUtil instance = null;
         ResultSet rs = null;
-        try{
-            connection = DBUtil.getInstance("sybase", SybaseConstant.DB_HOST, SybaseConstant.DB_PORT, SybaseConstant.DB_NAME, SybaseConstant.DB_USERNAME, SybaseConstant.DB_PASSWORD).getConnection();
+        try {
+            instance = extracted();
             String sql = "select name from dbo.sysobjects where type='U' order by name asc";
-            rs = DBUtil.query(connection, sql);
+            rs = instance.query(sql);
 
             while (rs.next()) {
                 tables.add(rs.getString("name"));
@@ -35,24 +34,29 @@ public class SybaseTableService implements TableService {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            DBUtil.close(rs);
-            DBUtil.close(connection);
+            instance.close(rs);
+            instance.close();
         }
 
         return tables;
     }
 
+    private DBUtil extracted() throws SQLException, Exception {
+        return DBUtil.getInstance("sybase", SybaseConstant.DB_HOST, SybaseConstant.DB_PORT, SybaseConstant.DB_NAME,
+                SybaseConstant.DB_USERNAME, SybaseConstant.DB_PASSWORD);
+    }
+
     @Override
     public List<FieldModel> allField(String tablename) throws SQLException {
         List<FieldModel> data = Lists.newArrayList();
-        Connection connection = null;
+        DBUtil instance = null;
         ResultSet rs = null;
-        System.out.println(  tablename + "doc generate begin");
-        try{
-            connection = DBUtil.getInstance("sybase", SybaseConstant.DB_HOST, SybaseConstant.DB_PORT, SybaseConstant.DB_NAME, SybaseConstant.DB_USERNAME, SybaseConstant.DB_PASSWORD).getConnection();
+        System.out.println(tablename + "doc generate begin");
+        try {
+            instance = extracted();
             String sql = String.format("select c.name fname,t.name ftype, t.length flength, c.status status  " +
                     "from syscolumns c, systypes t where c.usertype = t.usertype and c.id=object_id('%s')", tablename);
-            rs = DBUtil.query(connection, sql);
+            rs = instance.query(sql);
 
             while (rs.next()) {
                 String fname = rs.getString("fname");
@@ -72,8 +76,8 @@ public class SybaseTableService implements TableService {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            DBUtil.close(rs);
-            DBUtil.close(connection);
+            instance.close(rs);
+            instance.close();
         }
         System.out.println(  tablename + "doc generate end");
 

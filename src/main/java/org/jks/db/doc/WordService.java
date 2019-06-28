@@ -10,7 +10,6 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblPr;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTcPr;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STVerticalJc;
-import sun.reflect.misc.FieldUtil;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -85,8 +84,6 @@ public class WordService {
             //写入文件
             doc.write(os);
             close(os);
-
-
         }
     }
 
@@ -106,7 +103,7 @@ public class WordService {
         run.setBold(true); //加粗
         run.setText("表名:" + tablename);
 
-        Field[] fields = FieldUtil.getDeclaredFields(FieldModel.class);
+        Field[] fields = FieldModel.class.getFields();
         Arrays.asList(fields).forEach(field -> {
             Name name = field.getAnnotation(Name.class);
             if(name != null){
